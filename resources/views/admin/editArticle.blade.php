@@ -6,12 +6,6 @@
             @csrf
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="text-center"> Preview Article </h3>
-                    <img id="article-thumbnail-preview" class="mt-3" src="{{ asset('articles/'.$article['thumbnail']) }}">
-                    <h2 id="article-title-preview" class="text-center mt-3"> {{ $article->title }} </h2>
-                    <div id="article-content-preview" class="mt-3"> {!! $article->description !!} </div>
-                </div>
-                <div class="col-md-6">
                     <input type="hidden" name="article-id" value="{{ $article->id }}" />
                     <div class="form-group">
                         <label for="upload-article-thumbnail-btn" class="btn btn-gradient-primary btn-lg"> Choose Thumbnail </label>
@@ -25,12 +19,19 @@
                     </div>
                     <button type="submit" class="btn btn-block btn-gradient-primary btn-lg"> Save Changes </button>
                 </div>
+                <div class="col-md-6">
+                    <h3 class="text-center"> Preview Article </h3>
+                    <img id="article-thumbnail-preview" class="mt-3" src="{{ asset('articles/'.$article['thumbnail']) }}">
+                    <h2 id="article-title-preview" class="text-center mt-3"> {{ $article->title }} </h2>
+                    <div id="article-content-preview" class="mt-3 ck-content"> {!! $article->description !!} </div>
+                </div>
             </div>
         </form>
     </div>
 </div>
 @endsection
 @push('scripts')
+    <script charset="utf-8" src="//cdn.iframe.ly/embed.js?api_key=44c6b936d257624f69c321"></script>
     <script type="text/javascript" src="{{ asset('plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
     <script type="text/javascript">
         $.ajaxSetup({
@@ -85,6 +86,9 @@
                         $("#article-content-preview").html(articleEditor.getData());
                         $("#article-editor").removeClass("is-invalid");
                         $(".ck.ck-reset.ck-editor.ck-rounded-corners").next().remove("span");
+                        document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+                            iframely.load( element, element.attributes.url.value );
+                        });
                     }, 10);
                 });
             })
@@ -93,6 +97,9 @@
             });
 
         $(document).ready(() => {
+            document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+                iframely.load( element, element.attributes.url.value );
+            });
             $("#upload-article-thumbnail-btn").change(function() {
                 $("#upload-article-thumbnail-btn").removeClass("is-invalid");
                 $("#upload-article-thumbnail-btn").next().remove("span");
