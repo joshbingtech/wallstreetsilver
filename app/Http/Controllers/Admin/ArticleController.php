@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class ArticleController extends Controller
 {
     public function index(Request $request)
     {
-
         // Fetch records
         $articles = array();
         $articles = Article::join('users', 'articles.user_id', '=', 'users.id')->get(['articles.*', 'users.name', 'users.profile_avatar_url']);
@@ -56,6 +57,54 @@ class ArticleController extends Controller
             $article = Article::create($data);
             notify()->success("You've created a new article successfully.");
             return response()->json(["success"=> "You've created a new article successfully."]);
+        } catch(\Exception $e) {
+            return response()->json(['error' => 'Something went wrong. Please try again later.']);
+        }
+    }
+
+    public function editView($article_id)
+    {
+        $article = Article::find($article_id);
+        if($article) {
+            $data = [
+                'current_nav_tab' => 'articles',
+                'article' => $article,
+            ];
+            return view('admin/editArticle', $data);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function edit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'article-id' => 'required|numeric',
+            'article-thumbnail' => 'image|mimes:gif,jpeg,webp,bmp,png',
+            'article-title' => 'required',
+            'article' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
+
+        try {
+            $thumbnail = $request->file('article-thumbnail');
+            if($thumbnail) {
+                $thumbnail_name = time().'.'.$thumbnail->getClientOriginalExtension();
+                $thumbnail->move(public_path('/articles'), $thumbnail_name);
+
+                $article = DB::table('articles')->where('id', $request->input('article-id'))
+                    ->update(['thumbnail' => $thumbnail_name, 'title' => $request->input('article-title'), 'description' => $request->input('article'), 'user_id' => Auth::user()->id, 'updated_at' => Carbon::now()]);
+
+            } else {
+                $article = DB::table('articles')->where('id', $request->input('article-id'))
+                    ->update(['title' => $request->input('article-title'), 'description' => $request->input('article'), 'user_id' => Auth::user()->id, 'updated_at' => Carbon::now()]);
+            }
+
+            notify()->success("You've edited a new article successfully.");
+            return response()->json(["success"=> "You've edited a new article successfully."]);
         } catch(\Exception $e) {
             return response()->json(['error' => 'Something went wrong. Please try again later.']);
         }

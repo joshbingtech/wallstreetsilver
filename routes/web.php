@@ -24,6 +24,8 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function() {
     Route::get('/articles', [App\Http\Controllers\Admin\ArticleController::class, 'index'])->name('admin/articles');
     Route::get('/create-article', [App\Http\Controllers\Admin\ArticleController::class, 'createView'])->name('admin/create-article-view');
     Route::post('/create-article', [App\Http\Controllers\Admin\ArticleController::class, 'create'])->name('admin/create-article');
+    Route::get('/edit-article/{article_id}', [App\Http\Controllers\Admin\ArticleController::class, 'editView'])->name('admin/edit-article-view');
+    Route::post('/edit-article', [App\Http\Controllers\Admin\ArticleController::class, 'edit'])->name('admin/edit-article');
     Route::post('/delete-article', [App\Http\Controllers\Admin\ArticleController::class, 'delete'])->name('admin/delete-article');
 
     Route::get('/manage-admins', [App\Http\Controllers\Admin\UserController::class, 'manageAdmins'])->name('admin/manage-admins');
