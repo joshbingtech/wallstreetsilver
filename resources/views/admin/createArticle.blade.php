@@ -4,49 +4,23 @@
     <div class="content-wrapper mt-3 border-white">
         <form method="POST" action="{{ route('admin/create-article') }}" enctype="multipart/form-data" id="article-form">
             @csrf
-            @if(Session::has('success'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    {{Session::get('success')}}
-                </div>
-            @elseif(Session::has('error'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                    {{Session::get('error')}}
-                </div>
-            @endif
             <div class="row">
                 <div class="col-md-6">
                     <h3 class="text-center"> Preview Article </h3>
                     <img id="article-thumbnail-preview">
-                    <h2 id="article-title-preview" class="text-center"> {{ old('article-title') }} </h2>
-                    <div id="article-content-preview"> {{ old('article') }} </div>
+                    <h2 id="article-title-preview" class="text-center"></h2>
+                    <div id="article-content-preview"></div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="upload-article-thumbnail-btn" class="btn btn-gradient-primary btn-lg"> Choose Thumbnail </label>
-                        <input type="file" id="upload-article-thumbnail-btn" class="@error('article-thumbnail') is-invalid @enderror" name="article-thumbnail" accept="image/*" hidden/>
-                        @error('article-thumbnail')
-                            <span class="invalid-feedback" role="alert">
-                                <strong> {{ $message }} </strong>
-                            </span>
-                        @enderror
+                        <input type="file" id="upload-article-thumbnail-btn" name="article-thumbnail" accept="image/*" hidden/>
                     </div>
                     <div class="form-group">
-                        <input id="article-title" type="text" class="form-control form-control-lg @error('article-title') is-invalid @enderror" name="article-title" value="{{ old('article-title') }}" placeholder="Article Title">
-                        @error('article-title')
-                            <span class="invalid-feedback" role="alert">
-                                <strong> {{ $message }} </strong>
-                            </span>
-                        @enderror
+                        <input id="article-title" type="text" class="form-control form-control-lg" name="article-title" placeholder="Article Title">
                     </div>
                     <div class="form-group">
-                        <textarea id="article-editor" name="article" class="@error('article') is-invalid @enderror"> {{ old('article') }} </textarea>
-                        @error('article')
-                            <span class="invalid-feedback" role="alert">
-                                <strong> {{ $message }} </strong>
-                            </span>
-                        @enderror
+                        <textarea id="article-editor" name="article"></textarea>
                     </div>
                     <button type="submit" id="article-submit" class="btn btn-block btn-gradient-primary btn-lg"> Create Article </button>
                 </div>
@@ -58,6 +32,11 @@
 @push('scripts')
     <script type="text/javascript" src="{{ asset('plugins/ckeditor5-classic/build/ckeditor.js') }}"></script>
     <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         var articleEditor;
         ClassicEditor
             .create(document.querySelector("#article-editor"), {
@@ -103,6 +82,8 @@
                 articleEditor.model.document.on('change:data', () => {
                     setTimeout(function() {
                         $("#article-content-preview").html(articleEditor.getData());
+                        $("#article-editor").removeClass("is-invalid");
+                        $(".ck.ck-reset.ck-editor.ck-rounded-corners").next().remove("span");
                     }, 10);
                 });
             })
@@ -145,12 +126,7 @@
                 $("#article-title-preview").html($(this).val());
             });
 
-            $("#article-editor").change(function() {
-                $("#article-editor").removeClass("is-invalid");
-                $(".ck.ck-reset.ck-editor.ck-rounded-corners").next().remove("span");
-            });
-
-            $("#article-submit").bind("click", function(e) {
+            $("form#article-form").submit(function(e) {
                 e.preventDefault();
                 var has_error = false;
                 //form validation
@@ -175,19 +151,35 @@
                     $("#upload-article-thumbnail-btn").after('<span class="invalid-feedback" role="alert"><strong> Please choose a thumbnail. </strong></span>');
                     has_error = true;
                 }
-
-                if($("#article-title").val() == "") {
-                    $("#article-title").addClass("is-invalid");
-                    $("#article-title").after('<span class="invalid-feedback" role="alert"><strong> The article-title field is required. </strong></span>');
-                    has_error = true;
-                }
-                if(articleEditor.getData() == "") {
-                    $("#article-editor").addClass("is-invalid");
-                    $(".ck.ck-reset.ck-editor.ck-rounded-corners").after('<span class="invalid-feedback" role="alert"><strong> The article field is required. </strong></span>');
-                    has_error = true;
-                }
                 if(!has_error) {
-                    $("#article-form").submit();
+                    var formData = new FormData(this);
+                    $.ajax({
+                        url: "{{ route('admin/create-article') }}",
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if($.isEmptyObject(response.error)) {
+                                location.reload();
+                            } else {
+                                var errors = response.error;
+                                $.each(errors, function(key, error) {
+                                    if(key == "article-thumbnail") {
+                                        $("#upload-article-thumbnail-btn").addClass("is-invalid");
+                                        $("#upload-article-thumbnail-btn").after('<span class="invalid-feedback" role="alert"><strong>' + error + '</strong></span>');
+                                    } else if(key == "article-title") {
+                                        $("#article-title").addClass("is-invalid");
+                                        $("#article-title").after('<span class="invalid-feedback" role="alert"><strong>' + error + '</strong></span>');
+                                    } else if(key == "article") {
+                                        $("#article-editor").addClass("is-invalid");
+                                        $(".ck.ck-reset.ck-editor.ck-rounded-corners").after('<span class="invalid-feedback" role="alert"><strong>' + error + '</strong></span>');
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
             });
         });

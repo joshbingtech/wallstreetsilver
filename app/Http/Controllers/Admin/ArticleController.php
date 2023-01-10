@@ -34,11 +34,15 @@ class ArticleController extends Controller
 
     public function create(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'article-thumbnail' => 'required|image|mimes:gif,jpeg,webp,bmp,png',
             'article-title' => 'required',
             'article' => 'required'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        }
 
         try {
             $thumbnail = $request->file('article-thumbnail');
@@ -50,9 +54,10 @@ class ArticleController extends Controller
             $data['views'] = 0;
 
             $article = Article::create($data);
-            return redirect('admin/articles');
+            notify()->success("You've created a new article successfully.");
+            return response()->json(["success"=> "You've created a new article successfully."]);
         } catch(\Exception $e) {
-            return back()->with('error','Something went wrong while uploading file. Please try again later.');
+            return response()->json(['error' => 'Something went wrong. Please try again later.']);
         }
     }
 
