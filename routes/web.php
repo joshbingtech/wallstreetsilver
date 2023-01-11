@@ -44,6 +44,7 @@ Route::prefix('journalist')->middleware('auth')->group(function() {
 });
 
 Route::get('/', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('dashboard');
 Route::get('/news', [App\Http\Controllers\User\DashboardController::class, 'index'])->name('news');
 Route::get('/invitation/{token}', [App\Http\Controllers\Auth\InviteController::class, 'inviteView'])->name('invitation');
 Route::post('/accept-invitation', [App\Http\Controllers\Auth\InviteController::class, 'acceptInvitation'])->name('accept-invitation');
