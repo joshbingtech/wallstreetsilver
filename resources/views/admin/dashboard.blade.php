@@ -80,19 +80,28 @@
                                 <h4> Hot Articles </h4>
                                 <div class="featured-articles">
                                     @foreach ($featured_articles as $article)
-                                        <div class="article">
-                                            <div class="thumbnail">
-                                                <img src="{{ asset('articles/'.$article['thumbnail']) }}">
+                                        <div class="row article border-white">
+                                            <div class="col-md-4">
+                                                <div class="outer">
+                                                    <div class="middle">
+                                                        <div>
+                                                            <img src="{{ asset('articles/'.$article['thumbnail']) }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="headline">
-                                                <h5> {{ $article['title'] }} </h5>
-                                                {{ character_limiter($article['description'], 200) }}
-                                            </div>
-                                            <div class="article-publish-date">
-                                                {{ convertDateTimeTo($article['created_at']) }}
-                                            </div>
-                                            <div class="article-view">
-                                                <img src="{{ asset('images/icons/view-count.png') }}"> {{ $article['views'] }}
+                                            <div class="col-md-8 article-summary">
+                                                <h3 class="text-center"> {{ $article['title'] }} </h3>
+                                                <div>
+                                                    {{ character_limiter($article['description'], 200) }}
+                                                    <a href="#"> Continue Reading </a>
+                                                </div>
+                                                <div class="article-publish-date">
+                                                    {{ convertDateTimeTo($article['created_at']) }}
+                                                </div>
+                                                <div class="article-view">
+                                                    <img src="{{ asset('images/icons/view-count.png') }}"> {{ $article['views'] }}
+                                                </div>
                                             </div>
                                         </div>
                                     @endforeach

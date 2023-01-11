@@ -3,91 +3,76 @@
 @section('content')
 <div class="container">
     <div class="row mt-3">
-        <div class="col-md-3">
-
-        </div>
-        <div class="col-md-6">
-            <div class="featured-story mt-3">
-                <h2> Well-designed UI with perfect UX </h2>
-                CKEditor 5 provides every type of WYSIWYG editing solution imaginable. From editors similar to Google Docs and Medium, to Slack or Twitter-like applications, all is possible within a single editing framework.
-
-                The editor comes with a well-designed UI and perfect UX, so users can easily manage media and tables as well as use advanced features, such as auto-formatting, mentions, Paste from Word or Markdown support.
+        <div class="col-md-9">
+            <div class="featured-story-carousel border-white mt-3">
+                <div id="featured-story-carousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @foreach ($articles_for_carousel as $key => $article)
+                        <button type="button" data-bs-target="#featured-story-carousel" data-bs-slide-to="{{ $key }}" class="@if ($key == 0) active @endif" aria-current="true" aria-label="Slide {{ $key }}"></button>
+                        @endforeach
+                    </div>
+                    <div class="carousel-inner">
+                        @foreach ($articles_for_carousel as $key => $article)
+                            <div class="carousel-item @if ($key == 0) active @endif" data-bs-interval="5000">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="outer">
+                                            <div class="middle">
+                                                <div>
+                                                    <img src="{{ asset('articles/'.$article['thumbnail']) }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8" style="min-height: 210px; position: relative;">
+                                        <h3 class="text-center"> {{ $article['title'] }} </h3>
+                                        <div>
+                                            {{ character_limiter($article['description'], 200) }}
+                                            <a href="#"> Continue Reading </a>
+                                        </div>
+                                        <div class="article-publish-date">
+                                            <div>
+                                                {{ convertDateTimeTo($article['created_at']) }}
+                                            </div>
+                                            <div class="article-view">
+                                                <img src="{{ asset('images/icons/view-count.png') }}"> {{ $article['views'] }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
             <div class="featured-articles">
-                <div class="article">
-                    <div class="thumbnail">
-                        <img src="https://img1.wsimg.com/isteam/ip/0f26bcc2-c53b-4702-b696-c2581e8c31d8/Miner_Nugget.jpg">
-                    </div>
-                    <div class="headline">
-                        AbraSilver Reports Additional High-Grade Silver and Gold Intercepts Demonstrating Considerable Extension Potential Northeast of the Known Mineralized Zone
-                        Highlight results: 36m @ 399 g/t AgEq (incl. 5m @ 1,645 g/t AgEq), & 45m @ 172 g/t AgEq
-                    </div>
-                    <div class="article-publish-date">
-                        April 6, 2021
-                    </div>
-                    <div class="article-view">
-                        <img src="{{ asset('images/icons/view-count.png') }}"> 3
-                    </div>
-                </div>
-                <div class="article">
-                    <div class="thumbnail">
-                        <img src="https://img1.wsimg.com/isteam/ip/0f26bcc2-c53b-4702-b696-c2581e8c31d8/Miner_Nugget.jpg">
-                    </div>
-                    <div class="headline">
-                        AbraSilver Reports Additional High-Grade Silver and Gold Intercepts Demonstrating Considerable Extension Potential Northeast of the Known Mineralized Zone
-                        Highlight results: 36m @ 399 g/t AgEq (incl. 5m @ 1,645 g/t AgEq), & 45m @ 172 g/t AgEq
-                    </div>
-                    <div class="article-publish-date">
-                        April 6, 2021
-                    </div>
-                    <div class="article-view">
-                        <img src="{{ asset('images/icons/view-count.png') }}"> 3
-                    </div>
-                </div>
-                <div class="article">
-                    <div class="thumbnail">
-                        <img src="https://img1.wsimg.com/isteam/ip/0f26bcc2-c53b-4702-b696-c2581e8c31d8/Miner_Nugget.jpg">
-                    </div>
-                    <div class="headline">
-                        AbraSilver Reports Additional High-Grade Silver and Gold Intercepts Demonstrating Considerable Extension Potential Northeast of the Known Mineralized Zone
-                        Highlight results: 36m @ 399 g/t AgEq (incl. 5m @ 1,645 g/t AgEq), & 45m @ 172 g/t AgEq
-                    </div>
-                    <div class="article-publish-date">
-                        April 6, 2021
-                    </div>
-                    <div class="article-view">
-                        <img src="{{ asset('images/icons/view-count.png') }}"> 3
-                    </div>
-                </div>
-                <div class="article">
-                    <div class="thumbnail">
-                        <img src="https://img1.wsimg.com/isteam/ip/0f26bcc2-c53b-4702-b696-c2581e8c31d8/Miner_Nugget.jpg">
-                    </div>
-                    <div class="headline">
-                        AbraSilver Reports Additional High-Grade Silver and Gold Intercepts Demonstrating Considerable Extension Potential Northeast of the Known Mineralized Zone
-                        Highlight results: 36m @ 399 g/t AgEq (incl. 5m @ 1,645 g/t AgEq), & 45m @ 172 g/t AgEq
-                    </div>
-                    <div class="article-publish-date">
-                        April 6, 2021
-                    </div>
-                    <div class="article-view">
-                        <img src="{{ asset('images/icons/view-count.png') }}"> 3
-                    </div>
-                </div>
-                <div class="article">
-                    <div class="thumbnail">
-                        <img src="https://img1.wsimg.com/isteam/ip/0f26bcc2-c53b-4702-b696-c2581e8c31d8/Miner_Nugget.jpg">
-                    </div>
-                    <div class="headline">
-                        AbraSilver Reports Additional High-Grade Silver and Gold Intercepts Demonstrating Considerable Extension Potential Northeast of the Known Mineralized Zone
-                        Highlight results: 36m @ 399 g/t AgEq (incl. 5m @ 1,645 g/t AgEq), & 45m @ 172 g/t AgEq
-                    </div>
-                    <div class="article-publish-date">
-                        April 6, 2021
-                    </div>
-                    <div class="article-view">
-                        <img src="{{ asset('images/icons/view-count.png') }}"> 3
-                    </div>
+                <div class="featured-articles">
+                    @foreach ($featured_articles as $article)
+                        <div class="row article border-white">
+                            <div class="col-md-4">
+                                <div class="outer">
+                                    <div class="middle">
+                                        <div>
+                                            <img src="{{ asset('articles/'.$article['thumbnail']) }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8 article-summary">
+                                <h3 class="text-center"> {{ $article['title'] }} </h3>
+                                <div>
+                                    {{ character_limiter($article['description'], 200) }}
+                                    <a href="#"> Continue Reading </a>
+                                </div>
+                                <div class="article-publish-date">
+                                    {{ convertDateTimeTo($article['created_at']) }}
+                                </div>
+                                <div class="article-view">
+                                    <img src="{{ asset('images/icons/view-count.png') }}"> {{ $article['views'] }}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -97,3 +82,12 @@
     </div>
 </div>
 @endsection
+@push("scripts")
+    <script type="text/javascript">
+        $(document).ready(() => {
+            const carousel = new bootstrap.Carousel('#featured-story-carousel', {
+                interval: 2000,
+            });
+        });
+    </script>
+@endpush

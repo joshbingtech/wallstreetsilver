@@ -4,7 +4,7 @@
             <div class="col-md-3 my-2">
                 <div class="outer">
                     <div class="middle">
-                        <div class="inner">
+                        <div>
                             <h4 class="font-weight-light"> Contact </h4>
                             <table class="table-contact">
                                 @foreach ($contacts as $contact)
@@ -21,7 +21,7 @@
             <div class="col-md-3 my-2">
                 <div class="outer">
                     <div class="middle">
-                        <div class="inner">
+                        <div>
                             <h4 class="text-center font-weight-light"> Wall Street Silver. We just like Silver. </h4>
                             <h6 class="text-center font-weight-light"> Join Our <br/> Community, Ape! </h6>
                         </div>

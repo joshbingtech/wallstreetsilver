@@ -286,36 +286,19 @@ a.nav-link {
 .banner {
     width: 100%;
 }
-.featured-story {
-    margin-bottom: 70px;
-}
-.featured-story, .article {
-    padding: 30px 50px;
-    border: 2px solid;
-    /* color: #000; */
-    /* background: #FFF; */
-    border-radius: 10px;
-    box-shadow: rgb(255 255 255 / 35%) 0px 5px 15px;
-}
-.article {
-    margin-top: 50px;
-}
 .featured-articles .article {
-    display: flex;
-    position: relative;
-}
-.featured-articles .article .headline {
-    flex: 1;
-}
-.featured-articles .article .thumbnail {
-    padding-right: 30px;
-    text-align: center;
-}
-.featured-articles .article .thumbnail img {
-    width: 150px;
+    padding: 20px 10px;
+    background-color: rgba(31, 31, 35, 0.8);
     border-radius: 5px;
+    box-shadow: rgb(255 255 255 / 30%) 0px 2px 8px 0px;
+    margin-top: 30px;
 }
-.article .article-publish-date {
+.featured-articles .article .article-summary {
+    position: relative;
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+.featured-articles .article .article-publish-date {
     position: absolute;
     right: 10px;
     top: 0px;
@@ -326,20 +309,8 @@ a.nav-link {
     bottom: 0px;
     display: flex;
 }
-.article .article-view img {
+.article-view img {
     width: 30px;
-}
-@media (max-width: 1000px) {
-    .featured-articles .article {
-        display: block;
-    }
-    .featured-articles .article .thumbnail {
-        margin-bottom: 1rem;
-        padding-right: 0px;
-    }
-    .featured-articles .article .thumbnail, .featured-articles .article .headline {
-        display: block;
-    }
 }
 .content-wrapper {
     min-height: calc( 100vh - 400px - 8rem );
@@ -446,6 +417,32 @@ a.nav-link {
 /* Modals */
 
 /* Carousel */
+.featured-story-carousel {
+    padding: 20px 10px;
+    background-color: rgba(31, 31, 35, 0.8);
+    border-radius: 5px;
+    box-shadow: rgb(255 255 255 / 30%) 0px 2px 8px 0px;
+}
+.featured-story-carousel .article-publish-date {
+    position: absolute;
+    bottom: 0px;
+    right: 12px;
+}
+.featured-story-carousel .article-view {
+    float: right;
+    display: flex;
+}
+.carousel-indicators {
+    margin-bottom: 0px;
+}
+.carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+}
+/* Carousel */
+
+/* JCarousel */
 .jcarousel {
     position: relative;
     overflow: hidden;
@@ -473,7 +470,7 @@ a.nav-link {
     width: 100%;
     height: auto !important;
 }
-/* Carousel */
+/* JCarousel */
 
 /* DataTable */
 .dataTables_wrapper .dataTables_filter {

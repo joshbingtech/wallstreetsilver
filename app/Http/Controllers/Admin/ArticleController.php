@@ -21,7 +21,6 @@ class ArticleController extends Controller
         $data = [
             'current_nav_tab' => 'articles',
             'articles' => $articles,
-
         ];
         return view('admin/articles', $data);
     }

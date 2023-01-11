@@ -35,4 +35,9 @@ class Article extends Model
     {
         return $this->orderBy('views', 'desc')->limit(5)->get();
     }
+
+    public function getArticlesForCarousel()
+    {
+        return $this->orderBy('views', 'desc')->limit(3)->get();
+    }
 }
