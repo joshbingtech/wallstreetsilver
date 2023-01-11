@@ -24,7 +24,7 @@
                     @foreach ($articles as $article)
                         <tr data-article_id="{{ $article['id'] }}">
                             <td class="text-center"> {{ $article['id'] }} </td>
-                            <td class="text-center"><img class="thumbnail" src="{{ asset('articles/'.$article['thumbnail']) }}"></td>
+                            <td class="text-center"><img class="thumbnail" src="{{ asset('storage/articles/'.$article['thumbnail']) }}"></td>
                             <td class="text-center"> {{ $article['title'] }} </td>
                             <td> {{ character_limiter($article['description'], 200) }} </td>
                             <td class="text-center"> {{ $article['views'] }} </td>

@@ -47,7 +47,7 @@ class ArticleController extends Controller
         try {
             $thumbnail = $request->file('article-thumbnail');
             $data['thumbnail'] = time().'.'.$thumbnail->getClientOriginalExtension();
-            $thumbnail->move(public_path('/articles'), $data['thumbnail']);
+            $thumbnail->move(public_path('storage/articles'), $data['thumbnail']);
             $data['title'] = $request->input('article-title');
             $data['description'] = $request->input('article');
             $data['user_id'] = Auth::user()->id;
@@ -92,7 +92,7 @@ class ArticleController extends Controller
             $thumbnail = $request->file('article-thumbnail');
             if($thumbnail) {
                 $thumbnail_name = time().'.'.$thumbnail->getClientOriginalExtension();
-                $thumbnail->move(public_path('/articles'), $thumbnail_name);
+                $thumbnail->move(public_path('storage/articles'), $data['thumbnail']);
 
                 $article = DB::table('articles')->where('id', $request->input('article-id'))
                     ->update(['thumbnail' => $thumbnail_name, 'title' => $request->input('article-title'), 'description' => $request->input('article'), 'user_id' => Auth::user()->id, 'updated_at' => Carbon::now()]);
